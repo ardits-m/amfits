@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amfits — Minimal Clothing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0e0e0e;
+      --white: #f7f5f2;
+      --gray: #a8a49e;
+      --light: #eeece8;
+      --accent: #c8b89a;
+      --font-display: 'Cormorant Garamond', serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--white);
+      color: var(--black);
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 15px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 3rem;
+      background: rgba(247,245,242,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s;
+    }
+    nav.scrolled { border-bottom-color: var(--light); }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--black);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--black);
+      text-decoration: none;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+    .nav-links a:hover { opacity: 1; }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .nav-icon {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      color: var(--black);
+      opacity: 0.7;
+      transition: opacity 0.2s;
+      padding: 4px;
+    }
+    .nav-icon:hover { opacity: 1; }
+
+    /* ── HERO ── */
+    #hero {
+      height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 80px;
+    }
+
+    .hero-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 4rem 3rem 4rem 3rem;
+    }
+
+    .hero-tag {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 2rem;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(3.5rem, 6vw, 6rem);
+      font-weight: 300;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      margin-bottom: 2rem;
+    }
+    .hero-title em { font-style: italic; color: var(--gray); }
+    /* editable hero fields */
+    .hero-text .editable-field {
+      border-bottom: 1px dashed transparent;
+      transition: border-color 0.2s;
+      outline: none;
+      cursor: text;
+      display: block;
+    }
+    .hero-text .editable-field:hover { border-bottom-color: rgba(168,164,158,0.5); }
+    .hero-text .editable-field:focus { border-bottom-color: var(--gray); }
+
+    .hero-desc {
+      max-width: 320px;
+      color: var(--gray);
+      font-size: 14px;
+      line-height: 1.8;
+      margin-bottom: 3rem;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 1rem 2.5rem;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+      align-self: flex-start;
+    }
+    .btn-primary:hover { background: #2a2a2a; }
+
+    .btn-secondary {
+      display: inline-block;
+      background: transparent;
+      color: var(--black);
+      font-family: var(--font-body);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 1rem 2.5rem;
+      border: 1px solid var(--black);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover { background: var(--black); color: var(--white); }
+
+    .hero-image {
+      background: var(--light);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-image-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    /* SVG placeholder model illustration */
+    .hero-image svg {
+      width: 55%;
+      max-width: 280px;
+      opacity: 0.25;
+    }
+
+    .hero-img-label {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gray);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gray);
+    }
+    .scroll-line {
+      width: 1px;
+      height: 48px;
+      background: var(--gray);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(0.6); }
+    }
+
+    /* ── MARQUEE ── */
+    .marquee-wrap {
+      overflow: hidden;
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+      padding: 1rem 0;
+    }
+    .marquee-track {
+      display: flex;
+      gap: 3rem;
+      white-space: nowrap;
+      animation: marquee 22s linear infinite;
+    }
+    .marquee-item {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--gray);
+      letter-spacing: 0.06em;
+    }
+    .marquee-dot {
+      color: var(--accent);
+      font-style: normal;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ── SECTION COMMONS ── */
+    section { padding: 6rem 3rem; }
+
+    .section-tag {
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 300;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── COLLECTION GRID ── */
+    #collection { background: var(--white); }
+
+    .collection-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 3rem;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .product-card {
+      cursor: pointer;
+    }
+
+    .product-img {
+      background: var(--light);
+      aspect-ratio: 3/4;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .product-img svg {
+      width: 40%;
+      opacity: 0.18;
+    }
+
+    .product-img .badge {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      background: var(--black);
+      color: var(--white);
+      padding: 4px 10px;
+    }
+
+    .product-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(14,14,14,0.04);
+      opacity: 0;
+      transition: opacity 0.3s;
+      display: flex;
+      align-items: flex-end;
+      padding: 1.25rem;
+    }
+    .product-card:hover .product-overlay { opacity: 1; }
+
+    .product-add {
+      width: 100%;
+      background: var(--white);
+      color: var(--black);
+      border: none;
+      font-family: var(--font-body);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 0.75rem;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .product-add:hover { background: var(--black); color: var(--white); }
+
+    .product-name {
+      font-size: 14px;
+      font-weight: 400;
+      margin-bottom: 0.25rem;
+    }
+    .product-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .product-price { font-size: 14px; color: var(--black); }
+    .product-colors {
+      display: flex;
+      gap: 6px;
+    }
+    .color-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,0,0,0.15);
+    }
+
+    /* ── EDITABLE FIELDS ── */
+    .editable-field {
+      outline: none;
+      border-bottom: 1px dashed transparent;
+      transition: border-color 0.2s, background 0.15s;
+      border-radius: 2px;
+      cursor: text;
+      min-width: 20px;
+      display: inline-block;
+    }
+    .editable-field:hover {
+      border-bottom-color: var(--gray);
+    }
+    .editable-field:focus {
+      border-bottom-color: var(--black);
+      background: rgba(0,0,0,0.03);
+      padding: 0 3px;
+    }
+    .editable-badge {
+      outline: none;
+      cursor: text;
+    }
+    .editable-badge:focus {
+      outline: 1px dashed rgba(255,255,255,0.6);
+    }
+    /* small pencil hint */
+    .product-name.editable-field::after,
+    .product-price.editable-field::after {
+      content: ' ✎';
+      font-size: 10px;
+      color: var(--gray);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .product-name.editable-field:hover::after,
+    .product-price.editable-field:hover::after { opacity: 1; }
+    .product-name.editable-field:focus::after,
+    .product-price.editable-field:focus::after { content: ''; }
+
+    /* ── IMAGE UPLOAD ZONES ── */
+    .upload-zone {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: background 0.2s;
+      z-index: 2;
+    }
+    .upload-zone:hover { background: rgba(0,0,0,0.04); }
+    .upload-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+    .upload-icon {
+      width: 36px;
+      height: 36px;
+      border: 1px dashed var(--gray);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+    .upload-icon svg { width: 16px; height: 16px; stroke: var(--gray); }
+    .upload-label {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gray);
+      pointer-events: none;
+      text-align: center;
+      padding: 0 1rem;
+    }
+    .upload-zone.has-image { background: transparent; }
+    .upload-zone.has-image .upload-icon,
+    .upload-zone.has-image .upload-label { display: none; }
+    .uploaded-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+      z-index: 1;
+    }
+    .upload-zone.has-image ~ .uploaded-img { display: block; }
+
+    /* hero upload zone */
+    .hero-upload-zone {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      cursor: pointer;
+      z-index: 3;
+    }
+    .hero-upload-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+    .hero-upload-zone .upload-icon { width: 48px; height: 48px; }
+    .hero-upload-zone .upload-label { font-size: 11px; }
+    .hero-upload-zone.has-image .upload-icon,
+    .hero-upload-zone.has-image .upload-label,
+    .hero-upload-zone.has-image ~ .hero-image-placeholder { display: none; }
+    .hero-uploaded-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+      z-index: 2;
+    }
+    .hero-upload-zone.has-image ~ .hero-uploaded-img { display: block; }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--black);
+      color: var(--white);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    #about .section-tag { color: var(--gray); }
+    #about .section-title { color: var(--white); }
+
+    #about p {
+      color: #888;
+      font-size: 14px;
+      line-height: 1.9;
+      margin-bottom: 1.5rem;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .stat-label {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gray);
+    }
+
+    .about-visual {
+      background: #1a1a1a;
+      aspect-ratio: 4/5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .about-visual svg { width: 45%; opacity: 0.15; }
+    .about-visual-label {
+      position: absolute;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #555;
+    }
+
+    /* ── FEATURES ── */
+    #features {
+      background: var(--light);
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    .feature-item { padding: 0; }
+    .feature-icon {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+    .feature-icon svg { width: 16px; height: 16px; }
+    .feature-title {
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 400;
+      margin-bottom: 0.75rem;
+    }
+    .feature-desc {
+      font-size: 13px;
+      color: var(--gray);
+      line-height: 1.7;
+    }
+
+    /* ── NEWSLETTER ── */
+    #newsletter {
+      text-align: center;
+      padding: 6rem 3rem;
+      border-top: 1px solid var(--light);
+    }
+    .newsletter-form {
+      display: flex;
+      max-width: 440px;
+      margin: 2.5rem auto 0;
+    }
+    .newsletter-input {
+      flex: 1;
+      border: 1px solid var(--black);
+      border-right: none;
+      padding: 0.9rem 1.25rem;
+      font-family: var(--font-body);
+      font-size: 13px;
+      background: transparent;
+      color: var(--black);
+      outline: none;
+    }
+    .newsletter-input::placeholder { color: var(--gray); }
+    .newsletter-btn {
+      background: var(--black);
+      color: var(--white);
+      border: 1px solid var(--black);
+      padding: 0.9rem 1.75rem;
+      font-family: var(--font-body);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+    .newsletter-btn:hover { background: #2a2a2a; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black);
+      color: var(--white);
+      padding: 4rem 3rem 2rem;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid #222;
+    }
+    .footer-brand {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .footer-tagline {
+      font-size: 13px;
+      color: #555;
+      line-height: 1.8;
+      max-width: 220px;
+    }
+    .footer-col-title {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #555;
+      margin-bottom: 1.25rem;
+    }
+    .footer-links { list-style: none; }
+    .footer-links li { margin-bottom: 0.75rem; }
+    .footer-links a {
+      font-size: 13px;
+      color: #888;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--white); }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 2rem;
+    }
+    .footer-copy {
+      font-size: 12px;
+      color: #444;
+    }
+    .footer-socials { display: flex; gap: 1.25rem; }
+    .footer-socials a {
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #555;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-socials a:hover { color: var(--white); }
+
+    /* ── CART SIDEBAR ── */
+    .cart-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .cart-overlay.open { opacity: 1; pointer-events: all; }
+
+    .cart-sidebar {
+      position: fixed;
+      top: 0; right: 0;
+      width: 380px;
+      height: 100vh;
+      background: var(--white);
+      z-index: 201;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+      display: flex;
+      flex-direction: column;
+      padding: 2rem;
+    }
+    .cart-sidebar.open { transform: translateX(0); }
+
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    .cart-title {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+    .cart-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 22px;
+      color: var(--black);
+      line-height: 1;
+    }
+    .cart-empty {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      color: var(--gray);
+    }
+    .cart-empty svg { width: 48px; opacity: 0.3; }
+    .cart-empty p { font-size: 13px; letter-spacing: 0.06em; }
+
+    .cart-items { flex: 1; overflow-y: auto; }
+    .cart-item {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--light);
+    }
+    .cart-item-img {
+      width: 72px;
+      height: 90px;
+      background: var(--light);
+      flex-shrink: 0;
+    }
+    .cart-item-info { flex: 1; }
+    .cart-item-name { font-size: 13px; margin-bottom: 0.25rem; }
+    .cart-item-price { font-size: 13px; color: var(--gray); }
+    .cart-item-remove {
+      background: none;
+      border: none;
+      font-size: 18px;
+      color: var(--gray);
+      cursor: pointer;
+      align-self: flex-start;
+    }
+
+    .cart-footer { margin-top: 1.5rem; }
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      margin-bottom: 1.25rem;
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--black);
+      color: var(--white);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.85rem 2rem;
+      z-index: 300;
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ── ANIMATIONS ── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      #hero { grid-template-columns: 1fr; height: auto; }
+      .hero-image { height: 55vw; }
+      #about { grid-template-columns: 1fr; }
+      .about-visual { display: none; }
+      .product-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      nav { padding: 1.25rem 1.5rem; }
+      section { padding: 4rem 1.5rem; }
+    }
+
+    @media (max-width: 540px) {
+      .product-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .cart-sidebar { width: 100vw; }
+      .features-grid { grid-template-columns: 1fr; }
+    }
+    /* ── SOCIAL EDIT BUTTON ── */
+    .social-edit-btn {
+      background: none;
+      border: 1px solid #333;
+      color: #666;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+      padding: 0;
+      flex-shrink: 0;
+    }
+    .social-edit-btn:hover { border-color: #888; color: #aaa; }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: var(--white);
+      width: 100%;
+      max-width: 420px;
+      padding: 2rem;
+      margin: 1rem;
+      border-radius: 2px;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    .modal-title {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--black);
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 22px;
+      color: var(--gray);
+      cursor: pointer;
+      line-height: 1;
+    }
+    .modal-hint {
+      font-size: 12px;
+      color: var(--gray);
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+    .social-inputs { display: flex; flex-direction: column; gap: 1rem; }
+    .social-input-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .social-icon-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--black);
+      min-width: 100px;
+      letter-spacing: 0.04em;
+    }
+    .social-input-row input {
+      flex: 1;
+      border: 1px solid var(--light);
+      border-bottom-color: #ccc;
+      padding: 0.6rem 0.75rem;
+      font-family: var(--font-body);
+      font-size: 12px;
+      background: transparent;
+      color: var(--black);
+      outline: none;
+      transition: border-color 0.2s;
+      border-radius: 0;
+    }
+    .social-input-row input:focus { border-color: var(--black); }
+    .social-input-row input::placeholder { color: var(--gray); }
+
+    /* hide social links with no href */
+    .social-link.hidden { display: none; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Amfits</a>
+  <ul class="nav-links">
+    <li><a href="#collection">Collection</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#newsletter">Contact</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="nav-icon" aria-label="Search" onclick="alert('Search coming soon')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><circle cx="11" cy="11" r="7"/><path d="m17 17 3 3"/></svg>
+    </button>
+    <button class="nav-icon" aria-label="Open cart" id="cartBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <span id="cartCount" style="display:none;position:absolute;top:-4px;right:-4px;background:var(--black);color:var(--white);font-size:9px;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-body);">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-text">
+    <p class="hero-tag editable-field" contenteditable="true" title="Click to edit">New Arrivals — SS 2025</p>
+    <h1 class="hero-title editable-field" contenteditable="true" title="Click to edit">Wear less. Say more.</h1>
+    <p class="hero-desc editable-field" contenteditable="true" title="Click to edit">Amfits is built on restraint. Every piece is deliberate — timeless silhouettes, ethical fabrics, zero noise.</p>
+    <a href="#collection" class="btn-primary editable-field" contenteditable="true" title="Click to edit button text">Shop Collection</a>
+  </div>
+  <div class="hero-image">
+    <div class="hero-upload-zone" id="heroUploadZone">
+      <input type="file" id="heroFileInput" accept="image/*" onchange="handleHeroUpload(event)" />
+      <div class="upload-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      </div>
+      <span class="upload-label">Click to upload lookbook photo</span>
+    </div>
+    <div class="hero-image-placeholder" id="heroPlaceholder">
+      <svg viewBox="0 0 200 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="100" cy="52" rx="28" ry="28" stroke="#0e0e0e" stroke-width="1.5"/>
+        <path d="M60 90 Q100 80 140 90 L155 180 H45 Z" stroke="#0e0e0e" stroke-width="1.5" fill="none"/>
+        <path d="M45 180 L35 300 H85 L100 220 L115 300 H165 L155 180" stroke="#0e0e0e" stroke-width="1.5" fill="none"/>
+      </svg>
+      <span class="hero-img-label">Add your lookbook photo here</span>
+    </div>
+    <img class="hero-uploaded-img" id="heroUploadedImg" src="" alt="Hero" />
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Minimal Design <span class="marquee-dot">·</span></span>
+    <span class="marquee-item">Ethical Fabrics <span class="marquee-dot">·</span></span>
+    <span class="marquee-item">Timeless Silhouettes <span class="marquee-dot">·</span></span>
+    <span class="marquee-item">Free Worldwide Shipping <span class="marquee-dot">·</span></span>
+    <span class="marquee-item">Minimal Design <span class="marquee-dot">·</span></span>
+    <span class="marquee-item">Ethical Fabrics <span class="marquee-dot">·</span></span>
+    <span class="marquee-item">Timeless Silhouettes <span class="marquee-dot">·</span></span>
+    <span class="marquee-item">Free Worldwide Shipping <span class="marquee-dot">·</span></span>
+  </div>
+</div>
+
+<!-- COLLECTION -->
+<section id="collection">
+  <div class="collection-header fade-in">
+    <div>
+      <p class="section-tag">Spring / Summer 2025</p>
+      <h2 class="section-title">The Collection</h2>
+    </div>
+    <a href="#" class="btn-secondary">View All</a>
+  </div>
+
+  <div class="product-grid">
+
+    <!-- Product 1 -->
+    <div class="product-card fade-in" data-id="1">
+      <div class="product-img" id="pimg-1">
+        <img class="prod-uploaded-img" id="pimg-1-img" src="" alt="" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;" />
+        <div class="upload-zone" id="pzone-1">
+          <input type="file" accept="image/*" onchange="handleProductUpload(event,'pimg-1','pzone-1')" />
+          <div class="upload-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+          <span class="upload-label">Add photo</span>
+        </div>
+        <span class="badge editable-badge" style="z-index:3;" contenteditable="true" title="Click to edit badge">New</span>
+        <div class="product-overlay" style="z-index:4;">
+          <button class="product-add" onclick="addToCartFromCard(this)">Add to Cart</button>
+        </div>
+      </div>
+      <p class="product-name editable-field" contenteditable="true" title="Click to edit name">Linen Oversize Jacket</p>
+      <div class="product-meta">
+        <span class="product-price editable-field" contenteditable="true" title="Click to edit price">PKR 8,900</span>
+        <div class="product-colors">
+          <div class="color-dot" style="background:#e8e4de;"></div>
+          <div class="color-dot" style="background:#0e0e0e;"></div>
+          <div class="color-dot" style="background:#b8a898;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 2 -->
+    <div class="product-card fade-in" data-id="2">
+      <div class="product-img" id="pimg-2">
+        <img class="prod-uploaded-img" id="pimg-2-img" src="" alt="" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;" />
+        <div class="upload-zone" id="pzone-2">
+          <input type="file" accept="image/*" onchange="handleProductUpload(event,'pimg-2','pzone-2')" />
+          <div class="upload-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+          <span class="upload-label">Add photo</span>
+        </div>
+        <div class="product-overlay" style="z-index:4;">
+          <button class="product-add" onclick="addToCartFromCard(this)">Add to Cart</button>
+        </div>
+      </div>
+      <p class="product-name editable-field" contenteditable="true" title="Click to edit name">Cotton Straight Tee</p>
+      <div class="product-meta">
+        <span class="product-price editable-field" contenteditable="true" title="Click to edit price">PKR 3,200</span>
+        <div class="product-colors">
+          <div class="color-dot" style="background:#f0ece6;"></div>
+          <div class="color-dot" style="background:#4a4540;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 3 -->
+    <div class="product-card fade-in" data-id="3">
+      <div class="product-img" id="pimg-3">
+        <img class="prod-uploaded-img" id="pimg-3-img" src="" alt="" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;" />
+        <div class="upload-zone" id="pzone-3">
+          <input type="file" accept="image/*" onchange="handleProductUpload(event,'pimg-3','pzone-3')" />
+          <div class="upload-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+          <span class="upload-label">Add photo</span>
+        </div>
+        <span class="badge editable-badge" style="z-index:3;" contenteditable="true" title="Click to edit badge">Bestseller</span>
+        <div class="product-overlay" style="z-index:4;">
+          <button class="product-add" onclick="addToCartFromCard(this)">Add to Cart</button>
+        </div>
+      </div>
+      <p class="product-name editable-field" contenteditable="true" title="Click to edit name">Wide Leg Trousers</p>
+      <div class="product-meta">
+        <span class="product-price editable-field" contenteditable="true" title="Click to edit price">PKR 5,600</span>
+        <div class="product-colors">
+          <div class="color-dot" style="background:#d4cfc8;"></div>
+          <div class="color-dot" style="background:#0e0e0e;"></div>
+          <div class="color-dot" style="background:#8c7b6a;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 4 -->
+    <div class="product-card fade-in" data-id="4">
+      <div class="product-img" id="pimg-4">
+        <img class="prod-uploaded-img" id="pimg-4-img" src="" alt="" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;" />
+        <div class="upload-zone" id="pzone-4">
+          <input type="file" accept="image/*" onchange="handleProductUpload(event,'pimg-4','pzone-4')" />
+          <div class="upload-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+          <span class="upload-label">Add photo</span>
+        </div>
+        <div class="product-overlay" style="z-index:4;">
+          <button class="product-add" onclick="addToCartFromCard(this)">Add to Cart</button>
+        </div>
+      </div>
+      <p class="product-name editable-field" contenteditable="true" title="Click to edit name">Relaxed Knit Sweater</p>
+      <div class="product-meta">
+        <span class="product-price editable-field" contenteditable="true" title="Click to edit price">PKR 6,400</span>
+        <div class="product-colors">
+          <div class="color-dot" style="background:#e8e0d5;"></div>
+          <div class="color-dot" style="background:#6b5e52;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 5 -->
+    <div class="product-card fade-in" data-id="5">
+      <div class="product-img" id="pimg-5">
+        <img class="prod-uploaded-img" id="pimg-5-img" src="" alt="" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;" />
+        <div class="upload-zone" id="pzone-5">
+          <input type="file" accept="image/*" onchange="handleProductUpload(event,'pimg-5','pzone-5')" />
+          <div class="upload-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+          <span class="upload-label">Add photo</span>
+        </div>
+        <span class="badge editable-badge" style="z-index:3;" contenteditable="true" title="Click to edit badge">New</span>
+        <div class="product-overlay" style="z-index:4;">
+          <button class="product-add" onclick="addToCartFromCard(this)">Add to Cart</button>
+        </div>
+      </div>
+      <p class="product-name editable-field" contenteditable="true" title="Click to edit name">Midi Slip Dress</p>
+      <div class="product-meta">
+        <span class="product-price editable-field" contenteditable="true" title="Click to edit price">PKR 7,100</span>
+        <div class="product-colors">
+          <div class="color-dot" style="background:#f5f0ea;"></div>
+          <div class="color-dot" style="background:#1a1a1a;"></div>
+          <div class="color-dot" style="background:#c4b0a0;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product 6 -->
+    <div class="product-card fade-in" data-id="6">
+      <div class="product-img" id="pimg-6">
+        <img class="prod-uploaded-img" id="pimg-6-img" src="" alt="" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;" />
+        <div class="upload-zone" id="pzone-6">
+          <input type="file" accept="image/*" onchange="handleProductUpload(event,'pimg-6','pzone-6')" />
+          <div class="upload-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+          <span class="upload-label">Add photo</span>
+        </div>
+        <div class="product-overlay" style="z-index:4;">
+          <button class="product-add" onclick="addToCartFromCard(this)">Add to Cart</button>
+        </div>
+      </div>
+      <p class="product-name editable-field" contenteditable="true" title="Click to edit name">Structured Coat</p>
+      <div class="product-meta">
+        <span class="product-price editable-field" contenteditable="true" title="Click to edit price">PKR 14,500</span>
+        <div class="product-colors">
+          <div class="color-dot" style="background:#0e0e0e;"></div>
+          <div class="color-dot" style="background:#c8b89a;"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="fade-in">
+    <p class="section-tag">Our Story</p>
+    <h2 class="section-title">Clothes that<br/>do not shout.</h2>
+    <p>Amfits was born from a simple frustration — finding clothes that feel as good as they look, without the noise. We design for people who have already figured out who they are.</p>
+    <p>Every piece is made with ethically sourced natural fibres, in small batches, with no seasonal waste. We are slow fashion, not fast trends.</p>
+    <a href="#" class="btn-primary" style="margin-top:1rem;">Our Values</a>
+    <div class="about-stats">
+      <div>
+        <p class="stat-num">100%</p>
+        <p class="stat-label">Natural Fibres</p>
+      </div>
+      <div>
+        <p class="stat-num">0</p>
+        <p class="stat-label">Trend Collections</p>
+      </div>
+    </div>
+  </div>
+  <div class="about-visual fade-in">
+    <svg viewBox="0 0 200 340" fill="none"><ellipse cx="100" cy="52" rx="28" ry="28" stroke="#f7f5f2" stroke-width="1.5"/><path d="M60 90 Q100 80 140 90 L155 180 H45 Z" stroke="#f7f5f2" stroke-width="1.5" fill="none"/><path d="M45 180 L35 300 H85 L100 220 L115 300 H165 L155 180" stroke="#f7f5f2" stroke-width="1.5" fill="none"/></svg>
+    <span class="about-visual-label">Replace with campaign photo</span>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" class="fade-in">
+  <p class="section-tag">Why Amfits</p>
+  <h2 class="section-title">Built different.</h2>
+  <div class="features-grid">
+    <div class="feature-item">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <p class="feature-title">Ethical Sourcing</p>
+      <p class="feature-desc">All fabrics traced to certified suppliers. No compromises on people or planet.</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      </div>
+      <p class="feature-title">Made to Last</p>
+      <p class="feature-desc">Small batch production. Reinforced seams. Pieces designed to outlive trends.</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      <p class="feature-title">Free Returns</p>
+      <p class="feature-desc">30-day free returns, no questions asked. We stand behind every stitch.</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      </div>
+      <p class="feature-title">Worldwide Shipping</p>
+      <p class="feature-desc">Delivered to 40+ countries with tracked, plastic-free packaging.</p>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section id="newsletter" class="fade-in">
+  <p class="section-tag">Stay in touch</p>
+  <h2 class="section-title">Quiet updates.<br/>No spam.</h2>
+  <form class="newsletter-form" onsubmit="handleNewsletter(event)">
+    <input class="newsletter-input" type="email" placeholder="your@email.com" required />
+    <button class="newsletter-btn" type="submit">Subscribe</button>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <p class="footer-brand">Amfits</p>
+      <p class="footer-tagline">Minimal clothing for people who already know who they are.</p>
+    </div>
+    <div>
+      <p class="footer-col-title">Shop</p>
+      <ul class="footer-links">
+        <li><a href="#collection">New Arrivals</a></li>
+        <li><a href="#collection">Tops</a></li>
+        <li><a href="#collection">Bottoms</a></li>
+        <li><a href="#collection">Outerwear</a></li>
+        <li><a href="#collection">Dresses</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Info</p>
+      <ul class="footer-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#">Sustainability</a></li>
+        <li><a href="#">Size Guide</a></li>
+        <li><a href="#">Care Guide</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Help</p>
+      <ul class="footer-links">
+        <li><a href="#">Shipping & Returns</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2025 Amfits. All rights reserved.</p>
+    <div class="footer-socials" id="socialLinks">
+      <a href="#" id="social-instagram" class="social-link" data-platform="instagram" target="_blank">Instagram</a>
+      <a href="#" id="social-tiktok" class="social-link" data-platform="tiktok" target="_blank">TikTok</a>
+      <a href="#" id="social-pinterest" class="social-link" data-platform="pinterest" target="_blank">Pinterest</a>
+      <button class="social-edit-btn" id="socialEditBtn" onclick="openSocialEditor()" title="Edit social links">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </button>
+    </div>
+  </div>
+</footer>
+
+<!-- SOCIAL EDITOR MODAL -->
+<div class="modal-overlay" id="socialModal" onclick="closeSocialEditor(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <span class="modal-title">Your Social Links</span>
+      <button class="modal-close" onclick="closeSocialEditor()">×</button>
+    </div>
+    <p class="modal-hint">Paste your full profile URL for each platform. Leave blank to hide.</p>
+    <div class="social-inputs">
+      <div class="social-input-row">
+        <div class="social-icon-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          Instagram
+        </div>
+        <input type="url" id="input-instagram" placeholder="https://instagram.com/amfits" />
+      </div>
+      <div class="social-input-row">
+        <div class="social-icon-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+          TikTok
+        </div>
+        <input type="url" id="input-tiktok" placeholder="https://tiktok.com/@amfits" />
+      </div>
+      <div class="social-input-row">
+        <div class="social-icon-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16"><path d="M8 12a4 4 0 1 1 8 0 4 4 0 0 1-8 0z"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M12 16v6M8.5 20l7-8"/></svg>
+          Pinterest
+        </div>
+        <input type="url" id="input-pinterest" placeholder="https://pinterest.com/amfits" />
+      </div>
+      <div class="social-input-row">
+        <div class="social-icon-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53A4.48 4.48 0 0 0 22.43 2a9 9 0 0 1-2.88 1.1A4.52 4.52 0 0 0 11.07 8a12.83 12.83 0 0 1-9.32-4.72 4.52 4.52 0 0 0 1.4 6.03A4.42 4.42 0 0 1 1 8.72v.06a4.52 4.52 0 0 0 3.62 4.43 4.48 4.48 0 0 1-2.04.08 4.52 4.52 0 0 0 4.22 3.13A9.05 9.05 0 0 1 1 19.54a12.77 12.77 0 0 0 6.92 2.03c8.3 0 12.85-6.88 12.85-12.85 0-.2 0-.39-.01-.58A9.19 9.19 0 0 0 23 3z"/></svg>
+          Twitter / X
+        </div>
+        <input type="url" id="input-twitter" placeholder="https://x.com/amfits" />
+      </div>
+      <div class="social-input-row">
+        <div class="social-icon-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29.94 29.94 0 0 0 1 12a29.94 29.94 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.96-1.96A29.94 29.94 0 0 0 23 12a29.94 29.94 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+          YouTube
+        </div>
+        <input type="url" id="input-youtube" placeholder="https://youtube.com/@amfits" />
+      </div>
+    </div>
+    <button class="btn-primary" style="width:100%;margin-top:1.5rem;" onclick="saveSocialLinks()">Save Links</button>
+  </div>
+</div>
+
+<!-- CART SIDEBAR -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <span class="cart-title">Your Bag (<span id="cartItemCount">0</span>)</span>
+    <button class="cart-close" onclick="closeCart()">×</button>
+  </div>
+  <div id="cartItems" class="cart-items">
+    <div class="cart-empty" id="cartEmpty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <p>Your bag is empty</p>
+    </div>
+  </div>
+  <div class="cart-footer" id="cartFooter" style="display:none;">
+    <div class="cart-total">
+      <span>Total</span>
+      <span id="cartTotal">PKR 0</span>
+    </div>
+    <button class="btn-primary" style="width:100%;text-align:center;" onclick="alert('Checkout integration coming soon!')">Checkout</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // Nav scroll
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Fade-in observer
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Cart state
+  let cart = [];
+
+  function addToCartFromCard(btn) {
+    const card = btn.closest('.product-card');
+    const name = card.querySelector('.product-name').innerText.trim();
+    const price = card.querySelector('.product-price').innerText.trim();
+    cart.push({ name, price });
+    renderCart();
+    showToast(name + ' added to bag');
+  }
+
+  function addToCart(name, price) {
+    cart.push({ name, price });
+    renderCart();
+    showToast(name + ' added to bag');
+  }
+
+  function removeFromCart(i) {
+    cart.splice(i, 1);
+    renderCart();
+  }
+
+  function renderCart() {
+    const count = cart.length;
+    document.getElementById('cartItemCount').textContent = count;
+    const cc = document.getElementById('cartCount');
+    cc.textContent = count;
+    cc.style.display = count > 0 ? 'flex' : 'none';
+
+    const empty = document.getElementById('cartEmpty');
+    const footer = document.getElementById('cartFooter');
+    const itemsEl = document.getElementById('cartItems');
+
+    // Clear non-empty items
+    itemsEl.querySelectorAll('.cart-item').forEach(el => el.remove());
+
+    if (count === 0) {
+      empty.style.display = 'flex';
+      footer.style.display = 'none';
+    } else {
+      empty.style.display = 'none';
+      footer.style.display = 'block';
+      cart.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `<div class="cart-item-img"></div><div class="cart-item-info"><p class="cart-item-name">${item.name}</p><p class="cart-item-price">${item.price}</p></div><button class="cart-item-remove" onclick="removeFromCart(${i})">×</button>`;
+        itemsEl.appendChild(div);
+      });
+      // Total (sum of PKR values)
+      const total = cart.reduce((sum, item) => {
+        return sum + parseInt(item.price.replace(/[^0-9]/g, ''));
+      }, 0);
+      document.getElementById('cartTotal').textContent = 'PKR ' + total.toLocaleString();
+    }
+  }
+
+  document.getElementById('cartBtn').addEventListener('click', () => {
+    document.getElementById('cartSidebar').classList.add('open');
+    document.getElementById('cartOverlay').classList.add('open');
+  });
+
+  function closeCart() {
+    document.getElementById('cartSidebar').classList.remove('open');
+    document.getElementById('cartOverlay').classList.remove('open');
+  }
+
+  // Toast
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  // Hero upload
+  function handleHeroUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    const img = document.getElementById('heroUploadedImg');
+    const zone = document.getElementById('heroUploadZone');
+    const placeholder = document.getElementById('heroPlaceholder');
+    img.src = url;
+    img.style.display = 'block';
+    placeholder.style.display = 'none';
+    zone.querySelector('.upload-icon').style.display = 'none';
+    zone.querySelector('.upload-label').style.display = 'none';
+    showToast('Hero photo updated');
+  }
+
+  // Product upload
+  function handleProductUpload(event, imgContainerId, zoneId) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    const imgEl = document.getElementById(imgContainerId + '-img');
+    const zone = document.getElementById(zoneId);
+    imgEl.src = url;
+    imgEl.style.display = 'block';
+    zone.querySelector('.upload-icon').style.display = 'none';
+    zone.querySelector('.upload-label').style.display = 'none';
+    showToast('Product photo added');
+  }
+
+  // Social links editor
+  const socialData = { instagram: '', tiktok: '', pinterest: '', twitter: '', youtube: '' };
+
+  function openSocialEditor() {
+    // Pre-fill inputs with current saved values
+    Object.keys(socialData).forEach(platform => {
+      const input = document.getElementById('input-' + platform);
+      if (input) input.value = socialData[platform];
+    });
+    document.getElementById('socialModal').classList.add('open');
+  }
+
+  function closeSocialEditor(e) {
+    if (!e || e.target === document.getElementById('socialModal')) {
+      document.getElementById('socialModal').classList.remove('open');
+    }
+  }
+
+  function saveSocialLinks() {
+    const platforms = ['instagram', 'tiktok', 'pinterest', 'twitter', 'youtube'];
+    const names = { instagram: 'Instagram', tiktok: 'TikTok', pinterest: 'Pinterest', twitter: 'Twitter / X', youtube: 'YouTube' };
+    const container = document.getElementById('socialLinks');
+
+    // Remove any dynamically added links (twitter/youtube) before rebuilding
+    container.querySelectorAll('.social-link-dynamic').forEach(el => el.remove());
+
+    platforms.forEach(platform => {
+      const input = document.getElementById('input-' + platform);
+      const url = input ? input.value.trim() : '';
+      socialData[platform] = url;
+
+      const existing = document.getElementById('social-' + platform);
+      if (existing) {
+        // update existing static links
+        if (url) {
+          existing.href = url;
+          existing.classList.remove('hidden');
+        } else {
+          existing.href = '#';
+          existing.classList.add('hidden');
+        }
+      } else if (url) {
+        // Create new dynamic link (twitter, youtube)
+        const a = document.createElement('a');
+        a.href = url;
+        a.id = 'social-' + platform;
+        a.className = 'social-link social-link-dynamic';
+        a.target = '_blank';
+        a.textContent = names[platform];
+        // Insert before edit button
+        container.insertBefore(a, document.getElementById('socialEditBtn'));
+      }
+    });
+
+    closeSocialEditor();
+    showToast('Social links saved');
+  }
+
+  // Newsletter
+  function handleNewsletter(e) {
+    e.preventDefault();
+    showToast('You\'re on the list — thank you');
+    e.target.reset();
+  }
+</script>
+
+</body>
+</html>
